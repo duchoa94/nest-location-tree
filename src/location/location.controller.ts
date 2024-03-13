@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UsePipes,
+  Res,
+} from '@nestjs/common';
+import { Response } from 'express';
 import { LocationService } from './location.service';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
@@ -11,8 +22,12 @@ export class LocationController {
 
   @Post()
   @UsePipes(new ZodValidationPipe(createLocationSchema))
-  create(@Body() createLocationDto: CreateLocationDto) {
-    return this.locationService.create(createLocationDto);
+  async create(
+    @Body() createLocationDto: CreateLocationDto,
+    @Res() res: Response,
+  ) {
+    const data = await this.locationService.create(createLocationDto);
+    return res.json({ data });
   }
 
   @Get()
@@ -26,7 +41,10 @@ export class LocationController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLocationDto: UpdateLocationDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateLocationDto: UpdateLocationDto,
+  ) {
     return this.locationService.update(+id, updateLocationDto);
   }
 

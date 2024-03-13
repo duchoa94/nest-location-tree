@@ -17,9 +17,8 @@ model Location {
   id        Int        @id @default(autoincrement())
   uuid      String     @unique @default(uuid())
   name      String
-  number    String
-  area      Float
-  areaUnit  String
+  area      Float?
+  areaUnit  String?
   parentId  Int?
   parent    Location?  @relation("LocationToLocation", fields: [parentId], references: [id])
   children  Location[] @relation("LocationToLocation")

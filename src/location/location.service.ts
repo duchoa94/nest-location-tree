@@ -3,6 +3,7 @@ import { PrismaService } from '../services/prisma.service';
 import { Prisma } from '@prisma/client';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
+import { nullable } from 'zod';
 
 @Injectable()
 export class LocationService {
@@ -13,12 +14,16 @@ export class LocationService {
   }
 
   findAll() {
-    return this.prisma.location.findMany();
+    return this.prisma.location.findMany({
+      where: { area: { not: null }, areaUnit: { not: null } },
+      include: { parent: { include: { parent: { select: { name: true } } } } },
+    });
   }
 
   findOne(id: number) {
     return this.prisma.location.findUnique({
       where: { id },
+      include: { parent: { include: { parent: { select: { name: true } } } } },
     });
   }
 
