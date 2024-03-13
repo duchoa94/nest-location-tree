@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateLocationDto } from './create-location.dto';
+import { updateLocationSchema } from '../schema/location.schema';
+import { z } from 'zod';
 
-export class UpdateLocationDto extends PartialType(CreateLocationDto) {}
+export type UpdateLocationDto = z.infer<typeof updateLocationSchema>;
