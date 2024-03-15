@@ -16,7 +16,7 @@ datasource db {
 model Location {
   id        Int        @id @default(autoincrement())
   uuid      String     @unique @default(uuid())
-  name      String
+  name      String     @unique
   area      Float?
   areaUnit  String?
   parentId  Int?

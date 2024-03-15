@@ -15,8 +15,9 @@ export class ZodValidationPipe implements PipeTransform {
       return parsedValue;
     } catch (error) {
       if (error instanceof ZodError && error?.errors?.length > 0) {
-        const errors = error.errors;
-        throw new PreconditionFailedException(errors);
+        const errorBody = error.errors[0];
+        console.log('errorBody:', errorBody)
+        throw new PreconditionFailedException(errorBody);
       }
 
       throw new BadRequestException(error.toString());
