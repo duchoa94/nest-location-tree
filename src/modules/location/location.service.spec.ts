@@ -15,4 +15,10 @@ describe('LocationService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  it('should return list of locations', async () => {
+    const locations = await service.findAll();
+    console.log('locations:', locations)
+    expect(locations).toBeDefined();
+  });
 });

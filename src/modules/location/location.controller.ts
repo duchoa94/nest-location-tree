@@ -8,7 +8,7 @@ import {
   Delete,
   UsePipes,
   Res,
-  BadRequestException,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { LocationService } from './location.service';
@@ -16,6 +16,7 @@ import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
 import { ZodValidationPipe } from '../../pipes/ZodValidationPipe';
 import { createLocationSchema } from './schema/location.schema';
+import { LoggingInterceptor } from 'src/interceptors/logging.interceptor';
 
 @Controller('location')
 export class LocationController {
@@ -27,21 +28,13 @@ export class LocationController {
     @Body() createLocationDto: CreateLocationDto,
     @Res() res: Response,
   ) {
-    try {
-      const data = await this.locationService.create(createLocationDto);
-      return res.json({ data });
-    } catch (error) {
-      throw new BadRequestException(error);
-    }
+    const data = await this.locationService.create(createLocationDto);
+    return res.json({ data });
   }
 
   @Get()
   findAll() {
-    try {
-      return this.locationService.findAll();
-    } catch (error) {
-      throw new BadRequestException(error);
-    }
+    return this.locationService.findAll();
   }
 
   @Get(':id')
@@ -54,19 +47,11 @@ export class LocationController {
     @Param('id') id: string,
     @Body() updateLocationDto: UpdateLocationDto,
   ) {
-    try {
-      return this.locationService.update(+id, updateLocationDto);
-    } catch (error) {
-      throw new BadRequestException(error);
-    }
+    return this.locationService.update(+id, updateLocationDto);
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    try {
-      return await this.locationService.remove(+id);
-    } catch (error) {
-      throw new BadRequestException(error);
-    }
+    return await this.locationService.remove(+id);
   }
 }
