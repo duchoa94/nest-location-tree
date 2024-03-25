@@ -8,7 +8,6 @@ import {
   Delete,
   UsePipes,
   Res,
-  UseInterceptors,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { LocationService } from './location.service';
@@ -16,11 +15,11 @@ import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
 import { ZodValidationPipe } from '../../pipes/ZodValidationPipe';
 import { createLocationSchema } from './schema/location.schema';
-import { LoggingInterceptor } from 'src/interceptors/logging.interceptor';
+import { Logger } from 'nestjs-pino';
 
 @Controller('location')
 export class LocationController {
-  constructor(private readonly locationService: LocationService) {}
+  constructor(private readonly locationService: LocationService, private readonly logger: Logger) {}
 
   @Post()
   @UsePipes(new ZodValidationPipe(createLocationSchema))
@@ -34,6 +33,7 @@ export class LocationController {
 
   @Get()
   findAll() {
+    // this.logger.log('Hello world!');
     return this.locationService.findAll();
   }
 

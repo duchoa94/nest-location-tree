@@ -1,13 +1,13 @@
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { AppExceptionFilter } from './filters/app-exception.filter';
-import { LoggingInterceptor } from './interceptors/logging.interceptor';
+import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  // app.useGlobalInterceptors(new LoggingInterceptor());
-  app.useGlobalFilters(new AppExceptionFilter());
-  
+  const logger = app.get(Logger);
+  app.useGlobalFilters(new AppExceptionFilter(logger));
+
   await app.listen(3000);
 }
 bootstrap();
